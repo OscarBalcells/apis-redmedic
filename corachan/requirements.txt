@@ -1,0 +1,7 @@
+FLASK==0.12.2
+flask-restful==0.3.6
+web3
+eth-account
+wheel
+urllib3
+pytest>=3.5
