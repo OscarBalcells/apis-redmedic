@@ -6,7 +6,7 @@ You'll need Docker Compose as well as Docker to run the APIs. There's three of t
 
 There's 3 different Flask resources you can access.
 
-1) Nonce
+**1) Nonce**
 
 Every single request is protected against replay attacks because the transaction gets sent with a nonce. The nonce is just an integer value representing how many transactions that particular address has sent. The signature includes the nonce and once the transaction is processed by the API, the valid nonce now will be the previous nonce plus 1. nonce_now = nonce_before + 1 after transaction gets processed. Any data requestor will therefore either have to keep track of the valid nonce or ask the API using the following resource:
 
@@ -14,16 +14,16 @@ Every single request is protected against replay attacks because the transaction
 
 Whereas the id is the identifier of the patient and the signature is string representing the signed message "nonce". We basically sign the word "nonce" and send it. The API can then recover the address which signed the message using the following commands:
 
-'''
+```
 from eth_account.messages import encode_defunct
 from web3 import Web3, HTTPProvider
 w3 = Web3(HTTPProvider(my_geth_node))
 
 messageHash = encode_defunct(text="nonce")
 addr = w3.eth.account.recover_message(messageHash, signature=sig)
-'''
+```
 
-2) Patient Info
+**2) Patient Info**
 
 Next is command for querying info about a patient. We have to specify the id of the patient as well as the category we want to query as well as the valid nonce. If we don't know the nonce we can just query the previous Resource.
 
@@ -32,7 +32,7 @@ Next is command for querying info about a patient. We have to specify the id of 
 If we write "all" as category, the whole profile will be sent.
 If a valid category is specified, only the list of resources of that category will be sent.
 
-3) Edit Info
+**3) Edit Info**
 
 ***<string:host>:<int:port>/edit***
 
@@ -40,6 +40,7 @@ Here, the whole profile of a patient will be attached in the body of the http re
 
 The fields of a patient_id object stored in the database are:
 
+```
 personalData = {"id":"", "name":"", "mphr":"", pphr:""}
 allergies = []
 procedures = []
@@ -47,10 +48,11 @@ immunizations = []
 medications = []
 conditions = []
 images = []
+```
 
 ## How to sign a request?
 
-'''
+```
 //data is a javascript String
 function signData(data) {
     const msgBuffer = ethUtil.toBuffer(data);
@@ -60,6 +62,6 @@ function signData(data) {
 		const sigHex = "0x"+sig.r.toString("hex")+sig.s.toString("hex")+sig.v.toString(16);
     return sigHex;
 }
-'''
+```
 
 
