@@ -1,4 +1,4 @@
-FLASK==0.12.2
+FLASK==2.2.5
 flask-restful==0.3.6
 web3
 eth-account
